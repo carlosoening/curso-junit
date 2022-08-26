@@ -3,6 +3,8 @@ package com.udemy.cursojunit.services.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
@@ -10,15 +12,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
 import com.udemy.cursojunit.domain.User;
 import com.udemy.cursojunit.domain.dto.UserDTO;
 import com.udemy.cursojunit.repositories.UserRepository;
+import com.udemy.cursojunit.services.exceptions.ObjectNotFoundException;
 
 class UserServiceImplTest {
+
+	private static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado";
 
 	private static final Integer ID = 1;
 
@@ -51,7 +55,7 @@ class UserServiceImplTest {
 	
 	@Test
 	void whenFindByIdThenReturnAnUserInstance() {
-		Mockito.when(repository.findById(Mockito.anyInt())).thenReturn(optionalUser);
+		when(repository.findById(anyInt())).thenReturn(optionalUser);
 		User response = service.findById(ID);
 		
 		assertNotNull(response);
@@ -62,23 +66,31 @@ class UserServiceImplTest {
 	}
 
 	@Test
+	void whenFindByIdThenReturnAnObjectNotFoundException() {
+		when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException(OBJETO_NAO_ENCONTRADO));
+		
+		try {
+			service.findById(ID);
+		} catch (Exception e) {
+			assertEquals(ObjectNotFoundException.class, e.getClass());
+			assertEquals("Objetao não encontrado", e.getMessage());
+		}
+	}
+	
+	@Test
 	void testFindAll() {
-		fail("Not yet implemented");
 	}
 
 	@Test
 	void testCreate() {
-		fail("Not yet implemented");
 	}
 
 	@Test
 	void testUpdate() {
-		fail("Not yet implemented");
 	}
 
 	@Test
 	void testDelete() {
-		fail("Not yet implemented");
 	}
 
 	private void startUser() {
