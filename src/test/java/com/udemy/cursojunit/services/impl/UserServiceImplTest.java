@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -24,6 +27,8 @@ import com.udemy.cursojunit.services.exceptions.DataIntegrityViolationException;
 import com.udemy.cursojunit.services.exceptions.ObjectNotFoundException;
 
 class UserServiceImplTest {
+
+	private static final String EMAIL_JA_CADASTRADO_NO_SISTEMA = "E-mail ja cadastrado no sistema";
 
 	private static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado";
 
@@ -78,7 +83,7 @@ class UserServiceImplTest {
 			service.findById(ID);
 		} catch (Exception e) {
 			assertEquals(ObjectNotFoundException.class, e.getClass());
-			assertEquals("Objeto não encontrado", e.getMessage());
+			assertEquals(OBJETO_NAO_ENCONTRADO, e.getMessage());
 		}
 	}
 	
@@ -120,6 +125,7 @@ class UserServiceImplTest {
 			service.create(userDTO);
 		} catch (Exception e) {
 			assertEquals(DataIntegrityViolationException.class, e.getClass());
+			assertEquals(EMAIL_JA_CADASTRADO_NO_SISTEMA, e.getMessage());
 		}
 	}
 
@@ -136,9 +142,18 @@ class UserServiceImplTest {
 		assertEquals(EMAIL, response.getEmail());
 		assertEquals(PASSWORD, response.getPassword());
 	}
-
+	
 	@Test
-	void testDelete() {
+	void whenUpdateThenReturnADataIntegrityViolationException() {
+		when(repository.findByEmail(anyString())).thenReturn(optionalUser);
+		
+		try {
+			optionalUser.get().setId(2);
+			service.update(userDTO);
+		} catch (Exception e) {
+			assertEquals(DataIntegrityViolationException.class, e.getClass());
+			assertEquals(EMAIL_JA_CADASTRADO_NO_SISTEMA, e.getMessage());
+		}
 	}
 
 	private void startUser() {
