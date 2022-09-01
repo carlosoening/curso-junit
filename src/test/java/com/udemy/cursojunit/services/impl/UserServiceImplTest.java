@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import com.udemy.cursojunit.domain.User;
 import com.udemy.cursojunit.domain.dto.UserDTO;
 import com.udemy.cursojunit.repositories.UserRepository;
+import com.udemy.cursojunit.services.exceptions.DataIntegrityViolationException;
 import com.udemy.cursojunit.services.exceptions.ObjectNotFoundException;
 
 class UserServiceImplTest {
@@ -107,6 +109,18 @@ class UserServiceImplTest {
 		assertEquals(NAME, response.getName());
 		assertEquals(EMAIL, response.getEmail());
 		assertEquals(PASSWORD, response.getPassword());
+	}
+	
+	@Test
+	void whenCreateThenReturnADataIntegrityViolationException() {
+		when(repository.findByEmail(anyString())).thenReturn(optionalUser);
+		
+		try {
+			optionalUser.get().setId(2);
+			service.create(userDTO);
+		} catch (Exception e) {
+			assertEquals(DataIntegrityViolationException.class, e.getClass());
+		}
 	}
 
 	@Test
