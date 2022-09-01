@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -73,12 +74,22 @@ class UserServiceImplTest {
 			service.findById(ID);
 		} catch (Exception e) {
 			assertEquals(ObjectNotFoundException.class, e.getClass());
-			assertEquals("Objetao não encontrado", e.getMessage());
+			assertEquals("Objeto não encontrado", e.getMessage());
 		}
 	}
 	
 	@Test
-	void testFindAll() {
+	void whenFindAllThenReturnAListOfUsers() {
+		when(repository.findAll()).thenReturn(List.of(user));
+		
+		List<User> response = service.findAll();
+		assertNotNull(response);
+		assertEquals(1, response.size());
+		assertEquals(User.class, response.get(0).getClass());
+		assertEquals(ID, response.get(0).getId());
+		assertEquals(NAME, response.get(0).getName());
+		assertEquals(EMAIL, response.get(0).getEmail());
+		assertEquals(PASSWORD, response.get(0).getPassword());
 	}
 
 	@Test
