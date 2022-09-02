@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.udemy.cursojunit.domain.User;
 import com.udemy.cursojunit.domain.dto.UserDTO;
@@ -26,6 +27,7 @@ import com.udemy.cursojunit.repositories.UserRepository;
 import com.udemy.cursojunit.services.exceptions.DataIntegrityViolationException;
 import com.udemy.cursojunit.services.exceptions.ObjectNotFoundException;
 
+@SpringBootTest
 class UserServiceImplTest {
 
 	private static final String EMAIL_JA_CADASTRADO_NO_SISTEMA = "E-mail ja cadastrado no sistema";
