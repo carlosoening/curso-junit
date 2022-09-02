@@ -156,6 +156,14 @@ class UserServiceImplTest {
 		}
 	}
 
+	@Test
+	void deleteWithSuccess() {
+		when(repository.findById(anyInt())).thenReturn(optionalUser);
+		doNothing().when(repository).deleteById(anyInt());
+		service.delete(ID);
+		verify(repository, times(1)).deleteById(anyInt());
+	}
+
 	private void startUser() {
 		user = new User(ID, NAME, EMAIL, PASSWORD);
 		userDTO = new UserDTO(ID, NAME, EMAIL, PASSWORD);
