@@ -67,6 +67,7 @@ class UserControllerTest {
 		
 		assertNotNull(response);
 		assertNotNull(response.getBody());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(ResponseEntity.class, response.getClass());
 		assertEquals(UserDTO.class, response.getBody().getClass());
 		
@@ -97,8 +98,14 @@ class UserControllerTest {
 	}
 
 	@Test
-	void testCreate() {
-		fail("Not yet implemented");
+	void whenCreateThenReturnCreated() {
+		when(service.create(any())).thenReturn(user);
+		
+		ResponseEntity<UserDTO> response = controller.create(userDTO);
+		
+		assertEquals(ResponseEntity.class, response.getClass());
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		assertNotNull(response.getHeaders().get("Location"));
 	}
 
 	@Test
