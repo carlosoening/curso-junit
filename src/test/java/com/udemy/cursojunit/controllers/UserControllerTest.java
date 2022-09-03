@@ -109,13 +109,25 @@ class UserControllerTest {
 	}
 
 	@Test
-	void testUpdate() {
-		fail("Not yet implemented");
+	void whenUpdateThenReturnSuccess() {
+		when(service.update(userDTO)).thenReturn(user);
+		when(mapper.map(any(), any())).thenReturn(userDTO);
+		
+		ResponseEntity<UserDTO> response = controller.update(ID, userDTO);
+		
+		assertNotNull(response);
+		assertNotNull(response.getBody());
+		assertEquals(ResponseEntity.class, response.getClass());
+		assertEquals(UserDTO.class, response.getBody().getClass());
+		
+		assertEquals(ID, response.getBody().getId());
+		assertEquals(NAME, response.getBody().getName());
+		assertEquals(EMAIL, response.getBody().getEmail());
 	}
 
 	@Test
 	void testDelete() {
-		fail("Not yet implemented");
+		
 	}
 	
 	private void startUser() {
