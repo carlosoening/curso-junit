@@ -29,10 +29,6 @@ import com.udemy.cursojunit.services.impl.UserServiceImpl;
 @SpringBootTest
 class UserControllerTest {
 
-	private static final String EMAIL_JA_CADASTRADO_NO_SISTEMA = "E-mail ja cadastrado no sistema";
-
-	private static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado";
-
 	private static final Integer ID = 1;
 
 	private static final String NAME = "Valdir";
